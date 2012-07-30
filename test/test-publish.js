@@ -78,6 +78,21 @@
 
 			assert( spy.calledWith( message, data ) );		  
 		},
+
+		"publish method should call single-argument subscribers with data as first argument" : function(){
+			var message = TestHelper.getUniqueString(),
+				data = TestHelper.getUniqueString(),
+				subscriber, received;
+
+			subscriber = function( payload ){
+				received = payload;
+			};
+
+			PubSub.subscribe( message, subscriber );
+			PubSub.publishSync( message, data );
+
+			assert( received === data );
+		},
 		
 		"publish method should publish method asyncronously" : function( done ){
 			var message = TestHelper.getUniqueString(),
