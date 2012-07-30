@@ -43,7 +43,12 @@ https://github.com/mroderick/PubSubJS
 
 	function callSubscriber( subscriber, message, data ){
 		try {
-			subscriber( message, data );
+			if (subscriber.length === 1 ) {
+				subscriber( data );
+			}
+			else {
+				subscriber( message, data );
+			}
 		} catch( ex ){
 			setTimeout( throwException( ex ), 0);
 		}
