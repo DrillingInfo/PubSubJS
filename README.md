@@ -81,7 +81,7 @@ Don't say I didn't warn you.
 ### Exception Handling
 
     // create a function to receive errors (wrapped exceptions)
-    var myErrorHandler = function (error) {
+    var myErrorHandler = function( error ){
         // error.message (String) the message that was being published
         // error.data (Object) the data published with the message
         // error.subscriber (function) the subscriber that threw the exception
