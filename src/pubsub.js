@@ -19,7 +19,8 @@ https://github.com/mroderick/PubSubJS
 			version: '1.3.0'
 		},
 		messages = {},
-		lastUid = -1;
+		lastUid = -1,
+		errorHandler;
 
 	// Export the PubSub object for **Node.js** and **"CommonJS"**, with
 	// backwards-compatibility for the old `require()` API. If we're not in
@@ -45,11 +46,22 @@ https://github.com/mroderick/PubSubJS
 		};
 	}
 
+	function handleError( error ){
+		setTimeout( throwException( error.exception ), 0);
+	}
+	errorHandler = handleError;
+
 	function callSubscriber( subscriber, message, data ){
 		try {
 			subscriber( message, data );
 		} catch( ex ){
-			setTimeout( throwException( ex ), 0);
+			errorHandler({
+				subscriber: subscriber,
+				message: message,
+				data: data,
+				exception: ex,
+				defaultHandler: handleError
+			});
 		}
 	}
 
@@ -112,6 +124,15 @@ https://github.com/mroderick/PubSubJS
 		}
 		return true;
 	}
+
+	/**
+	 *	PubSub.setErrorHandler( errorHandler )
+	 *	- customErrorHandler (function): The replacement error handler
+	 *	Replaces the default error handler with the provided custom handler.
+	 */
+	PubSub.setErrorHandler = function( customErrorHandler ){
+		errorHandler = customErrorHandler;
+	};
 
 	/**
 	 *	PubSub.publish( message[, data] ) -> Boolean
