@@ -78,6 +78,28 @@ Don't say I didn't warn you.
     PubSub.unsubscribe( mySubscriber );
 
 
+### Error Handling
+
+    // create a function to receive errors (wrapped exceptions)
+    var myErrorHandler = function( error ){
+        // error.message (String) the message that was being published
+        // error.data (Object) the data published with the message
+        // error.subscriber (function) the subscriber that threw the exception
+        // error.exception (Object) the exception thrown by the subscriber
+        // error.defaultHandler (function) default PubSub error handler
+
+        // do something with the error
+        console.log( error.exception );
+
+        // conditionally invoke default exception handling if desired
+        if ( error.message === 'foo' ){
+            error.defaultHandler( error );
+        }
+    };
+
+    // replace the PubSubJS default handler with the custom handler
+    PubSub.setErrorHandler( myErrorHandler );
+
 ### Hierarchical addressing
 
     // create a subscriber to receive all messages from a hierarchy of topics
